@@ -111,9 +111,11 @@
           <div><i class="fa-sharp fa fa-bell fa-shake fa-2xl"></i></div>
           <div
             class="p-3 mt-3 w-100"
-            :class="bgColor ? 'text-dark-emphasis' : 'text-info'"
+            
           >
-            {{ alarmDesc }}
+           {{ alarm.desc }}
+
+           <audio ref="alarmAudioTag" :src="alarm.beep"></audio>
           </div>
         </div>
         <div class="modal-footer">
@@ -122,6 +124,7 @@
             @click="
               alarm.displayalerm = false;
               delete_task(alarm.index);
+              $refs.alarmAudioTag.pause()
             "
           >
             Close & delete
@@ -133,12 +136,16 @@
 </template>
 <script>
 import Cookies from "js-cookie";
+import alarmbeep from '../assets/alarm.wav'
 export default {
   data() {
     return {
       tasks: [],
       alarm: {
         displayalerm: false,
+        desc:'',
+        index:null,
+        beep: alarmbeep
       },
       displayForm: false,
       selectAction: "---with selected------",
@@ -235,6 +242,25 @@ computed:{
             return `${String(get_time.getDay())} days Left`
 
         }
+    }, 
+    checkAlarm(){
+      let date, now, day
+      for (const task of this.tasks) {
+        
+        date = task.date
+        now = new Date().getTime()
+        day = (date - now)/1000
+        if(day < 1 && day > -60){
+          this.alert(task.index, task.desc)
+        }
+
+      }
+    },
+    alert(index, desc){
+      this.alarm.index = index
+      this.alarm.desc = desc
+      this.alarm.displayalerm = true
+      this.$refs.alarmAudioTag.play()
     }
   },
 
@@ -245,14 +271,8 @@ computed:{
     }
     this.resizenewItemBtn();
     addEventListener("resize", this.resizenewItemBtn);
-
-    // bootstrap code for tooltips
-    var tooltipTriggerList = [].slice.call(
-      document.querySelectorAll('[data-bs-toggle="tooltip"]')
-    );
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-      return new bootstrap.Tooltip(tooltipTriggerEl);
-    });
+    this.$refs.alarmAudioTag.volume = 1.0
+    setInterval(this.checkAlarm, 1000)
   },
 };
 </script>
