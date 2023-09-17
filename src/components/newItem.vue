@@ -1,5 +1,4 @@
 <style scoped>
-
 input {
     box-shadow: none !important;
     border-top: none !important;
@@ -8,7 +7,6 @@ input {
     outline: none !important;
 
 }
-
 </style>
 
 <template lang="">
@@ -16,7 +14,7 @@ input {
         <div>
         <h3 class="text-center mt-3 shadow p-1 border">Add New Task</h3>
 
-        <form @submit.prevent="submitItem">
+        <form @submit.prevent="submitItem" ref="newItemForm">
         <div ref="newItemForm" class="form-section mt-5" style="height:150px">
             <div id="title" class="mb-3 animate__animated animate__slideInLeft d-none ">
               <label for="" class="form-label ms-2">Title:</label>
@@ -80,6 +78,7 @@ export default {
         nextSlide(slideOut, slideIn) {
             document.getElementById(slideOut).classList.add('animate__slideOutLeft', 'd-none')
             document.getElementById(slideIn).classList.remove('d-none', 'animate__slideOutLeft');
+
         },
         goNext() {
             let index = this.default
@@ -89,8 +88,12 @@ export default {
             } else if (index == 2) {
                 this.nextSlide('desc', 'date')
                 this.$refs.nextBtn.innerHTML = 'submit'
-                this.$refs.nextBtn.setAttribute('type', 'submit')
+
+            } else if (index == 3) {
+                this.submitItem()
+
             } else {
+
             }
             this.default += 1;
         },

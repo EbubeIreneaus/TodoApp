@@ -36,7 +36,7 @@
 }
 </style>
 <template>
-  <div class="animate__animated animate__slideInUp mt-1">
+  <div class="animate__animated animate__slideInUp mt-3">
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center">
         <select
@@ -63,7 +63,7 @@
 
     <div
       class="animate__animated animate__slideInLeft border mt-3"
-      v-for="(x, index) in tasks"
+      v-for="(x, index) in tasks" :key="index"
     >
       <div class="d-flex p-1 align-items-center justify-content-between">
         <span class="me-1 p-1"
