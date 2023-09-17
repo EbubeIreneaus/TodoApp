@@ -8,6 +8,12 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
+  build:{
+    rollupOptions: {
+      // Add Bootstrap to the list of external modules
+      external: ['bootstrap','animate.css','js-cookie','@fortawesome/fontawesome-free'],
+    },
+  },
 
   resolve: {
     alias: {
